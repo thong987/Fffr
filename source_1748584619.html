@@ -1,151 +1,43 @@
+# Flying Text Animation
+
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Chữ nháy bay lơ lửng</title>
-<style>
-  body {
-    margin: 0;
-    overflow: hidden;
-    background-color: black;
-    color: pink;
-    font-family: 'Arial', sans-serif;
-    perspective: 800px;
-    height: 100vh;
-  }
-
-  .floating-text {
-    position: absolute;
-    color: #ff99ff;
-    font-weight: bold;
-    font-size: 2rem;
-    text-shadow:
-      0 0 5px #ff99ff,
-      0 0 10px #ff99ff,
-      0 0 20px #ff00ff,
-      0 0 30px #ff00ff,
-      0 0 40px #ff00ff,
-      0 0 50px #ff00ff,
-      0 0 60px #ff00ff;
-    animation: flicker 1.5s infinite alternate;
-    white-space: nowrap;
-    user-select: none;
-  }
-
-  @keyframes flicker {
-    0%   { opacity: 1; filter: drop-shadow(0 0 8px #ff99ff); }
-    50%  { opacity: 0.6; filter: drop-shadow(0 0 4px #ff66ff); }
-    100% { opacity: 1; filter: drop-shadow(0 0 8px #ff99ff); }
-  }
-
-  .heart {
-    position: absolute;
-    color: red;
-    font-size: 1.5rem;
-    user-select: none;
-    animation: floatUp linear forwards;
-    text-shadow:
-      0 0 5px #ff0000,
-      0 0 10px #ff0000,
-      0 0 15px #ff4444;
-  }
-
-  @keyframes floatUp {
-    from {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-    }
-    to {
-      transform: translateY(-150vh) scale(0.5);
-      opacity: 0;
-    }
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flying Text</title>
+    <style>
+        body {
+            overflow: hidden;
+            background-color: black;
+            color: white;
+            font-size: 24px;
+            position: relative;
+        }
+        .fly {
+            position: absolute;
+            white-space: nowrap;
+            animation: fly 5s linear infinite;
+        }
+        @keyframes fly {
+            0% { transform: translateY(100vh); }
+            100% { transform: translateY(-10vh); }
+        }
+    </style>
 </head>
 <body>
-
-<script>
-  const messages = [
-    "Cảm ơn vì em đã đến",
-    "Làm người yêu anh nhé ♡",
-    "Anh yêu em nhiều lắm♡",
-    "Anh sẽ luôn bên cạnh em",
-    "Cảm ơn vì em đã đến",
-    "Làm người yêu anh nhé ♡",
-    "Anh yêu em nhiều lắm♡",
-    "Anh sẽ luôn bên cạnh em"
-  ];
-
-  const body = document.body;
-  const width = window.innerWidth;
-  const height = window.innerHeight;
-
-  // Hàm tạo chữ nháy bay lơ lửng
-  function createFloatingText(text) {
-    const el = document.createElement('div');
-    el.className = 'floating-text';
-    el.textContent = text;
-
-    // Random vị trí 3D
-    el.style.left = Math.random() * width + 'px';
-    el.style.top = Math.random() * height + 'px';
-    el.style.fontSize = (16 + Math.random() * 30) + 'px';
-    el.style.transform = `translateZ(${Math.random() * 600 - 300}px)`;
-
-    // Random animation delay để nháy không đồng bộ
-    el.style.animationDelay = (Math.random() * 2) + 's';
-
-    body.appendChild(el);
-
-    // Di chuyển nhẹ nhàng lên/xuống (bouncing)
-    let direction = 1;
-    let posY = parseFloat(el.style.top);
-    function animate() {
-      posY += direction * 0.3;
-      if (posY > height || posY < 0) direction = -direction;
-      el.style.top = posY + 'px';
-      requestAnimationFrame(animate);
-    }
-    animate();
-
-    return el;
-  }
-
-  // Tạo nhiều chữ bay lơ lửng
-  for (let i = 0; i < 30; i++) {
-    const msg = messages[Math.floor(Math.random() * messages.length)];
-    createFloatingText(msg);
-  }
-
-  // Tạo trái tim bay lên
-  function createHeart() {
-    const heart = document.createElement('div');
-    heart.className = 'heart';
-    heart.textContent = '❤️';
-
-    heart.style.left = Math.random() * width + 'px';
-    heart.style.top = height + 20 + 'px';
-    heart.style.fontSize = (12 + Math.random() * 24) + 'px';
-    heart.style.animationDuration = (4 + Math.random() * 4) + 's';
-
-    body.appendChild(heart);
-
-    // Xóa sau khi kết thúc animation
-    heart.addEventListener('animationend', () => {
-      heart.remove();
-    });
-  }
-
-  // Tạo liên tục trái tim bay lên
-  setInterval(createHeart, 300);
-
-  // Cập nhật kích thước khi resize
-  window.addEventListener('resize', () => {
-    width = window.innerWidth;
-    height = window.innerHeight;
-  });
-</script>
-
+    <script>
+        function createFlyingText() {
+            const text = document.createElement('div');
+            text.className = 'fly';
+            text.innerText = 'anh yêu em';
+            text.style.left = Math.random() * window.innerWidth + 'px';
+            document.body.appendChild(text);
+            setTimeout(() => {
+                text.remove();
+            }, 5000);
+        }
+        setInterval(createFlyingText, 500);
+    </script>
 </body>
 </html>
